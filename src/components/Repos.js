@@ -4,39 +4,48 @@ import { GithubContext } from "../context/context";
 import { ExampleChart, Pie3D, Column3D, Bar3D, Doughnut2D } from "./Charts";
 const Repos = () => {
   const { repos } = useContext(GithubContext);
-  let languages = repos.reduce((total, item) => {
-    const { language } = item;
+  const languages = repos.reduce((total, item) => {
+    const { language, stargazers_count } = item;
     // language is null, return total
     if (!language) {
       return total;
     }
     // if key not exist, create object key with value of 1
     if (!total[language]) {
-      total[language] = { label: language, value: 1 };
+      total[language] = { label: language, value: 1, stars: stargazers_count };
     } else {
       // key value +1
       total[language] = {
         ...total[language],
         value: total[language].value + 1,
+        stars: total[language].stars + stargazers_count,
       };
     }
     return total;
   }, {});
-  // take value from obj returns an array
-  languages = Object.values(languages);
-  // sort by highest to lowest
-  languages = languages.sort((a, b) => {
-    return b.value - a.value;
-  });
-  // slice top 5 out
-  languages = languages.slice(0, 5);
-  console.log(languages);
+  // take values from obj returns an array -> sort by highest to lowest -> slice top 5 out
+  const mostUsed = Object.values(languages)
+    .sort((a, b) => {
+      return b.value - a.value;
+    })
+    .slice(0, 5);
+  // take values from obj returns an array -> sort by highest to lowest -> map stars to value as chart is accepting label+value only, ->slice top 5 out
+  const mostPopular = Object.values(languages)
+    .sort((a, b) => {
+      return b.stars - a.stars;
+    })
+    .map((item) => {
+      return { ...item, value: item.stars };
+    })
+    .slice(0, 5);
 
-  const chartData = languages;
   return (
     <section className="section">
       <Wrapper className="section-center">
-        <Pie3D data={chartData} />
+        <Pie3D data={mostUsed} />
+        <div></div>
+        <Doughnut2D data={mostPopular} />
+        <div></div>
       </Wrapper>
     </section>
   );
