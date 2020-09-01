@@ -1,7 +1,23 @@
-import React from 'react';
+import React from "react";
+// import fc libraries
+import FusionCharts from "fusioncharts";
+// import fc components
+import ReactFC from "react-fusioncharts";
+// import fc chart type
+import Charts from "fusioncharts/fusioncharts.charts";
+// include fc theme
+import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion";
 
-const ExampleChart = () => {
-  return <div>chart</div>;
+ReactFC.fcRoot(FusionCharts, Charts, FusionTheme);
+
+const ChartComponents = ({ data }) => {
+  const chartConfigs = {
+    type: "column2d",
+    width: 800,
+    height: 400,
+    dataFormat: "json",
+    dataSource: data,
+  };
+  return <ReactFC {...chartConfigs} />;
 };
-
-export default ExampleChart;
+export default ChartComponents;
