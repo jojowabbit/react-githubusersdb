@@ -4,38 +4,39 @@ import { GithubContext } from "../context/context";
 import { ExampleChart, Pie3D, Column3D, Bar3D, Doughnut2D } from "./Charts";
 const Repos = () => {
   const { repos } = useContext(GithubContext);
-  const data = {
-    chart: {
-      caption: "Countries With Most Oil Reserves [2017-18]",
-      subCaption: "In MMbbl = One Million barrels",
-      xAxisName: "Country",
-      yAxisName: "Reserves (MMbbl)",
-      numberSuffix: "K",
-      theme: "fusion",
-    },
-    data: [
-      {
-        label: "Venezuela",
-        value: "700",
-      },
-      {
-        label: "Saudi",
-        value: "260",
-      },
-      {
-        label: "Canada",
-        value: "180",
-      },
-      {
-        label: "Iran",
-        value: "140",
-      },
-    ],
-  };
+  let languages = repos.reduce((total, item) => {
+    const { language } = item;
+    // language is null, return total
+    if (!language) {
+      return total;
+    }
+    // if key not exist, create object key with value of 1
+    if (!total[language]) {
+      total[language] = { label: language, value: 1 };
+    } else {
+      // key value +1
+      total[language] = {
+        ...total[language],
+        value: total[language].value + 1,
+      };
+    }
+    return total;
+  }, {});
+  // take value from obj returns an array
+  languages = Object.values(languages);
+  // sort by highest to lowest
+  languages = languages.sort((a, b) => {
+    return b.value - a.value;
+  });
+  // slice top 5 out
+  languages = languages.slice(0, 5);
+  console.log(languages);
+
+  const chartData = languages;
   return (
     <section className="section">
       <Wrapper className="section-center">
-        <ExampleChart data={data} />
+        <Pie3D data={chartData} />
       </Wrapper>
     </section>
   );

@@ -13,10 +13,13 @@ ReactFC.fcRoot(FusionCharts, Charts, FusionTheme);
 const ChartComponents = ({ data }) => {
   const chartConfigs = {
     type: "column2d",
-    width: 800,
+    width: 600,
     height: 400,
     dataFormat: "json",
-    dataSource: data,
+    dataSource: {
+      chart: { caption: "Languages", theme: "fusion" },
+      data,
+    },
   };
   return <ReactFC {...chartConfigs} />;
 };
