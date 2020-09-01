@@ -3,6 +3,11 @@ import styled from "styled-components";
 import { GithubContext } from "../context/context";
 import { ExampleChart, Pie3D, Column3D, Bar3D, Doughnut2D } from "./Charts";
 const Repos = () => {
+  const data = [
+    { label: "data1", value: 10 },
+    { label: "data2", value: 20 },
+    { label: "data3", value: 30 },
+  ];
   const { repos } = useContext(GithubContext);
   const languages = repos.reduce((total, item) => {
     const { language, stargazers_count } = item;
@@ -38,14 +43,15 @@ const Repos = () => {
       return { ...item, value: item.stars };
     })
     .slice(0, 5);
-
+  console.log(mostUsed);
   return (
     <section className="section">
       <Wrapper className="section-center">
         <Pie3D data={mostUsed} />
-        <div></div>
+
+        <Column3D data={data} />
         <Doughnut2D data={mostPopular} />
-        <div></div>
+        <Bar3D data={data} />
       </Wrapper>
     </section>
   );
