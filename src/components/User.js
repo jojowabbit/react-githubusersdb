@@ -7,6 +7,7 @@ const User = () => {
     <section className="section">
       <Wrapper className="section-center">
         <Card />
+        <Followers />
       </Wrapper>
     </section>
   );
