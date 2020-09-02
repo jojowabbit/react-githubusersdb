@@ -25,6 +25,20 @@ const GithubProvider = ({ children }) => {
   const toggleError = (show = false, msg = "") => {
     setError({ show, msg });
   };
+  // search github user
+  const searchGithubUser = async (user) => {
+    // toggleError : reset
+    toggleError();
+    // setLoading true
+    const response = await axios(`${rootUrl}/users/${user}`).catch((err) =>
+      console.log(err)
+    );
+    if (response) {
+      setGithubUser(response.data);
+    } else {
+      toggleError(false, "there is no user with that username");
+    }
+  };
   // check request rate
   const checkRequest = () => {
     axios(`${rootUrl}/rate_limit`)
@@ -44,7 +58,7 @@ const GithubProvider = ({ children }) => {
   useEffect(checkRequest, []);
   return (
     <GithubContext.Provider
-      value={{ githubUser, repos, followers, request, error }}
+      value={{ githubUser, repos, followers, request, error, searchGithubUser }}
     >
       {children}
     </GithubContext.Provider>
